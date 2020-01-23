@@ -74,6 +74,79 @@
 
   </div>
 
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- Link to firebase goes here -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+  <!-- Script starts here -->
+  <script>
+    //   Start coding here
+
+    // 1. Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyA5eYKsB8T2q6rMGdKSvac6eQsWTzsZEjE",
+      authDomain: "fir-recent-user.firebaseapp.com",
+      databaseURL: "https://fir-recent-user.firebaseio.com",
+      storageBucket: "fir-recent-user.appspot.com"
+    };
+    firebase.initializeApp(config);
+
+    // 2. Create a variable to reference the database
+    var database = firebase.database();
+
+    // 3. Initialize Values you will be using
+    var name = "";
+    var email = "";
+    var age = 0;
+    var comment = "";
+
+    // 4. Capture the button click
+    $("#add-user").on("click", function(event){
+        // Dont refresh the page!
+        // By using event.preventDefault();
+        event.preventDefault();
+
+        // Gather the info from the text input fields
+        name = $("#name-input").val().trim();
+        email = $("#email-input").val().trim();
+        age = $("#age-input").val().trim();
+        comment = $("#comment-input").val().trim();
+
+        database.ref().set({
+            name: name,
+            email: email,
+            age: age,
+            comment: comment
+        })
+    });
+
+
+    // Firebase watcher to update the values everytime the page loads or something changes
+    database.ref().on("value", function(snapshot){
+
+    // Log everything to the console to make sure 
+      console.log(snapshot.val());
+      console.log(snapshot.val().name);
+      console.log(snapshot.val().email);
+      console.log(snapshot.val().age);
+      console.log(snapshot.val().comment);
+
+    //   Change the HTML to reflect the snapshot
+    $("#name-display").text(snapshot.val().name);
+    $("#email-display").text(snapshot.val().email);
+    $("#age-display").text(snapshot.val().age);
+    $("#comment-display").text(snapshot.val().comment);
+
+    }, function(err){
+        console.log("Errors handled: but not really" + err.code);
+    })
+
+  </script>
+
+
+
 
 
 </body>
